@@ -44,5 +44,6 @@ Acompanhe abaixo o conteúdo programático das aulas e a evolução dos módulos
 ## 💻 Como Rodar os Exemplos Localmente
 
 1. **Clone este repositório:**
+   
    ```bash
-   git clone [https://github.com/emnlfrnds/back-end-codes.git](https://github.com/emnlfrnds/back-end-codes.git)
+   git clone https://github.com/emnlfrnds/back-end-codes.git
