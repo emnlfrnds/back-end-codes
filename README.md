@@ -41,6 +41,18 @@ Acompanhe abaixo o conteúdo programático das aulas e a evolução dos módulos
 
 ---
 
+### 🟢 Aula 2: Módulos e CommonJS vs ESM
+
+- **Status:** Concluído
+- **Tópicos Abordados:**
+  - Por que Modularizar?
+  - CommonJS vs. ECMAScript Modules (ESM)
+  - Módulos Nativos: Interagindo com o Sistema
+  - O Novo Padrão import/export
+  - O Organizador de Logs
+
+---
+
 ## 💻 Como Rodar os Exemplos Localmente
 
 1. **Clone este repositório:**
