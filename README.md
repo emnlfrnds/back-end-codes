@@ -66,6 +66,21 @@ Acompanhe abaixo o conteúdo programático das aulas e a evolução dos módulos
 
 ---
 
+### 🟢 Aula 4: Tratamento de Exceções Global
+
+- **Status:** Concluído
+- **Tópicos Abordados:**
+  - Contextualização
+  - Fundamentos: Blocos Try/Catch
+  - Listeners de Eventos
+  - Depuração
+  - Exemplos de Root Cause Analysis
+  - Implementação da Camada Global
+  - Padronização de Respostas
+  - Prevenção de Crashes
+
+---
+
 ## 💻 Como Rodar os Exemplos Localmente
 
 1. **Clone este repositório:**
