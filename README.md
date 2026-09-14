@@ -53,6 +53,19 @@ Acompanhe abaixo o conteúdo programático das aulas e a evolução dos módulos
 
 ---
 
+### 🟢 Aula 3: Streams e Buffers
+
+- **Status:** Concluído
+- **Tópicos Abordados:**
+  - Contextualização
+  - Buffers
+  - Streams
+  - Manipulação de Chunks
+  - Tipos de Streams
+  - Vantagens Técnicas
+
+---
+
 ## 💻 Como Rodar os Exemplos Localmente
 
 1. **Clone este repositório:**
