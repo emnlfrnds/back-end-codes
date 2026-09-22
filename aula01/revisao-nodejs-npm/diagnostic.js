@@ -7,7 +7,6 @@ const cpu = os.cpus();
 
 console.log('=== Diagnóstico do Servidor ===');
 
-
 console.log(`Arquitetura OS: ${plataforma}`);
 console.log(`Memória RAM Total: ${memoriaTotal} GB`);
 console.log(`Memória RAM Livre: ${memoriaLivre} GB`);
