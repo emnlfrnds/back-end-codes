@@ -1,118 +1,207 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🔐 API de Segurança — NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API backend desenvolvida com [NestJS](https://nestjs.com/) para demonstrar uma rota protegida por **API Key**, utilizando um header HTTP personalizado para controlar o acesso a um conteúdo seguro.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Além da rota protegida, o projeto possui uma rota raiz utilizada pelo `AppController`.
 
-## Description
+## 🛠️ Tecnologias e Conceitos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **[Node.js](https://nodejs.org/)** — ambiente de execução.
+- **[NestJS](https://nestjs.com/)** — framework utilizado para construção da API.
+- **TypeScript** — linguagem utilizada no desenvolvimento.
+- **API Key** — mecanismo simples de autenticação por chave enviada em header.
+- **HTTP Headers** — utilização do header `x-api-key` para autenticação.
+- **HTTP Status Codes** — utilização dos status `200` e `403`.
+- **Express Response** — uso do objeto `Response` para controlar headers e respostas HTTP.
 
-## Project setup
+## 📁 Estrutura Principal
 
-```bash
-$ npm install
+```text
+src/
+├── app.controller.ts
+├── app.service.ts
+└── security.controller.ts
 ```
 
-## Compile and run the project
+### Responsabilidade dos arquivos
 
-```bash
-# development
-$ npm run start
+| Arquivo | Responsabilidade |
+|---|---|
+| `app.controller.ts` | Define a rota raiz da aplicação. |
+| `app.service.ts` | Fornece a mensagem retornada pela rota raiz. |
+| `security.controller.ts` | Define a rota protegida `/security` e realiza a validação da API Key. |
 
-# watch mode
-$ npm run start:dev
+## 🔐 Rota Protegida
 
-# production mode
-$ npm run start:prod
+### `GET /security`
+
+A rota `/security` utiliza o header `x-api-key` para verificar se a requisição possui uma chave válida.
+
+A validação é realizada diretamente no controller antes da liberação do conteúdo. fileciteturn1file0L5-L18
+
+### Header necessário
+
+```http
+x-api-key: SUA_API_KEY
 ```
 
-## Run tests
+## ✅ Acesso autorizado
+
+Quando a chave enviada corresponde à chave esperada pela implementação atual, a API:
+
+- adiciona o header `x-auth-status: verificado`;
+- retorna o status HTTP `200`;
+- retorna uma mensagem de acesso concedido;
+- inclui um `timestamp` gerado no momento da requisição. fileciteturn1file0L9-L15
+
+### Exemplo com cURL
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+curl -H "x-api-key: SUA_API_KEY" http://localhost:3000/security
 ```
 
-## Deployment
+### Exemplo de resposta
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+```json
+{
+  "mensagem": "Acesso concedido ao conteúdo seguro!",
+  "timestamp": "2026-10-02T19:00:00.000Z"
+}
+```
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+> O valor de `timestamp` é gerado dinamicamente a cada requisição.
+
+## ❌ Acesso negado
+
+Quando a API Key é inválida ou não é enviada, a API retorna:
+
+- status HTTP `403`;
+- erro `Forbidden`;
+- mensagem informando que a chave é inválida ou está ausente. fileciteturn1file0L16-L22
+
+### Exemplo
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+curl http://localhost:3000/security
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Resposta
 
-## Observability
+```json
+{
+  "erro": "Forbidden",
+  "mensagem": "Chave de API inválida ou ausente"
+}
+```
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+## 🏠 Rota Principal
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+### `GET /`
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+A aplicação também possui uma rota raiz definida pelo `AppController`. Ela utiliza `AppService` para retornar uma mensagem simples. fileciteturn1file1L4-L10
 
-This project is already instrumented. Create a free account at [observe.nestjs.com](https://observe.nestjs.com), add an application, and paste the generated app key and secret into the `ObserveModule.forRoot()` call in `src/app.module.ts`.
+### Resposta
 
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
+```text
+Hello World!
+```
 
-## Resources
+A mensagem é fornecida pelo método `getHello()` do `AppService`. fileciteturn1file2L3-L7
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🚀 Como Executar
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 1. Instalar as dependências
 
-## Support
+```bash
+npm install
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### 2. Executar em desenvolvimento
 
-## Stay in touch
+```bash
+npm run start:dev
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### 3. Executar a aplicação
 
-## License
+Após iniciar o servidor, as rotas podem ser acessadas pela porta configurada no projeto.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Exemplo:
+
+```text
+http://localhost:3000
+```
+
+> Os scripts disponíveis no `package.json` não foram fornecidos junto aos arquivos analisados. Por isso, os comandos acima pressupõem uma configuração padrão de um projeto NestJS.
+
+## 🧪 Testando a API
+
+### Testar a rota principal
+
+```bash
+curl http://localhost:3000/
+```
+
+### Testar acesso sem API Key
+
+```bash
+curl http://localhost:3000/security
+```
+
+Resultado esperado:
+
+```http
+403 Forbidden
+```
+
+### Testar acesso com API Key
+
+```bash
+curl -H "x-api-key: SUA_API_KEY" http://localhost:3000/security
+```
+
+Resultado esperado:
+
+```http
+200 OK
+```
+
+## ⚠️ Observação de Segurança
+
+A implementação atual realiza a comparação da API Key diretamente no código do controller. fileciteturn1file0L8-L10
+
+Em uma aplicação real, uma chave de autenticação **não deve ficar exposta diretamente no código-fonte ou no repositório**.
+
+Uma abordagem mais adequada seria armazená-la em uma variável de ambiente, por exemplo:
+
+```env
+API_KEY=sua-chave-secreta
+```
+
+e carregá-la na aplicação por meio da configuração do ambiente.
+
+> Esta recomendação é uma melhoria de segurança e não faz parte da implementação atual dos arquivos analisados.
+
+## 🧠 Conceitos Praticados
+
+Este projeto demonstra conceitos importantes do NestJS e de APIs HTTP:
+
+- `@Controller()`
+- `@Get()`
+- Injeção de dependência
+- `@Headers()`
+- `@Res()`
+- Headers HTTP
+- Status HTTP `200`
+- Status HTTP `403`
+- Validação de API Key
+- Respostas JSON
+- `Date` / timestamp
+- Separação entre Controller e Service
+
+## 📚 Referências
+
+- [NestJS](https://nestjs.com/)
+- [NestJS — Controllers](https://docs.nestjs.com/controllers)
+- [NestJS — Providers](https://docs.nestjs.com/providers)
+- [NestJS — HTTP Module](https://docs.nestjs.com/)
