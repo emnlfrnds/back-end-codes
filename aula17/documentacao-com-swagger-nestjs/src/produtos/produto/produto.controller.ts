@@ -24,7 +24,7 @@ export class ProdutoController {
         status: 201, description: 'Produto Cadastrado com sucesso'
     })
     @ApiResponse({
-        status: 400, description: 'Playload enviado com dados inválidos'
+        status: 400, description: 'Payload enviado com dados inválidos'
     })
 
     async criar(@Body() criarProduto: CriarProduto) {

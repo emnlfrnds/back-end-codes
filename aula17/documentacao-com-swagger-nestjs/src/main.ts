@@ -9,7 +9,7 @@ async function bootstrap() {
   .setTitle('API de Catálogo e Estoque')
   .setDescription('Documentação técnica interativa e viva para integração')
   .setVersion('1.0')
-  .addTag('Produtos')
+  .addTag('produto')
   .addBearerAuth()
   .build();
 
