@@ -1,118 +1,220 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 📘 Documentação de API com Swagger — NestJS
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API desenvolvida com **NestJS** para praticar a documentação de rotas utilizando **Swagger (OpenAPI)**. O projeto trabalha com o cadastro de produtos e descreve, através de decorators, a operação de criação, os dados esperados e as respostas possíveis.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+O projeto documenta a criação de um produto, com dois cenários de resposta:
 
-## Description
+- Produto cadastrado → `201 Created`
+- Payload com dados inválidos → `400 Bad Request`
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🛠️ Tecnologias e Conceitos
 
-## Project setup
+- **[NestJS](https://nestjs.com/)** — framework utilizado no desenvolvimento da API.
+- **TypeScript** — linguagem utilizada no projeto.
+- **[@nestjs/swagger](https://docs.nestjs.com/openapi/introduction)** — integra o Swagger (OpenAPI) ao NestJS e gera a documentação a partir dos decorators.
+- **`@ApiTags()`** — agrupa as rotas de um controller na interface do Swagger.
+- **`@ApiOperation()`** — define o resumo da operação.
+- **`@ApiResponse()`** — lista as respostas possíveis de uma rota.
+- **`@ApiProperty()`** — documenta os campos de um DTO, com exemplo e descrição.
+- **DTO (Data Transfer Object)** — classe que define o formato dos dados recebidos na requisição.
 
-```bash
-$ npm install
+## 📁 Estrutura Principal
+
+```text
+src/
+├── app.controller.ts
+├── app.module.ts
+├── app.service.ts
+├── main.ts
+└── produtos/
+    ├── dto/
+    │   └── criar-produto/
+    │       └── criar-produto.ts
+    └── produto/
+        └── produto.controller.ts
 ```
 
-## Compile and run the project
+### Responsabilidade dos arquivos
+
+| Arquivo | Responsabilidade |
+|---|---|
+| `app.controller.ts` | Define o controller da rota de status. Nesta etapa, ainda não possui rotas. |
+| `app.service.ts` | Serviço da aplicação. Nesta etapa, ainda não possui métodos. |
+| `app.module.ts` | Módulo raiz da aplicação, que registra os controllers e providers. |
+| `main.ts` | Ponto de entrada da aplicação, onde o Swagger é configurado. |
+| `produto.controller.ts` | Define a rota de criação de produtos e sua documentação no Swagger. |
+| `criar-produto.ts` | DTO com os campos do produto, documentados com `@ApiProperty()`. |
+
+## 📦 DTO `CriarProduto`
+
+A classe `CriarProduto` define os campos que devem ser enviados para cadastrar um produto. Cada campo recebe um exemplo e uma descrição, que aparecem na documentação do Swagger:
+
+| Campo | Tipo | Exemplo | Descrição |
+|---|---|---|---|
+| `nome` | string | Pasta de dente | Descrição da função do Produto |
+| `preco` | number | 5.99 | Valor do produto |
+| `categoria` | string | Produtos Higiênicos | Categoria geral do Produto |
+
+## 🌐 Rotas
+
+### `POST /produto`
+
+Cadastra um novo produto no catálogo e devolve os dados recebidos, acrescidos de um `id` e da data de criação.
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+curl -X POST http://localhost:3000/produto \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Pasta de dente","preco":5.99,"categoria":"Produtos Higiênicos"}'
 ```
 
-## Run tests
+Exemplo de retorno (`201 Created`):
+
+```json
+{
+  "id": 150,
+  "nome": "Pasta de dente",
+  "preco": 5.99,
+  "categoria": "Produtos Higiênicos",
+  "criadoEm": "20/10/2026"
+}
+```
+
+> O `id` é fixo (`150`) nesta etapa e o produto não é salvo em nenhum lugar. O formato de `criadoEm` depende do locale do servidor.
+
+## 📝 Documentação com Swagger
+
+O `ProdutoController` utiliza os decorators do `@nestjs/swagger` para descrever a rota:
+
+```typescript
+@ApiTags('produto')
+@Controller('produto')
+export class ProdutoController {
+
+    @Post()
+    @ApiOperation({
+        summary: 'Cadastra um novo produto no catálogo'
+    })
+    @ApiResponse({
+        status: 201, description: 'Produto Cadastrado com sucesso'
+    })
+    @ApiResponse({
+        status: 400, description: 'Payload enviado com dados inválidos'
+    })
+    async criar(@Body() criarProduto: CriarProduto) {
+        // ...
+    }
+}
+```
+
+| Decorator | Onde é usado | Função |
+|---|---|---|
+| `@ApiTags('produto')` | Controller | Agrupa as rotas de produto na interface do Swagger. |
+| `@ApiOperation({ summary })` | Método | Define o resumo exibido para a operação. |
+| `@ApiResponse({ status, description })` | Método | Lista as respostas possíveis da rota (201 e 400). |
+| `@ApiProperty({ example, description })` | Propriedade do DTO | Define o exemplo e a descrição de cada campo. |
+
+### Acessando a documentação
+
+Após iniciar a aplicação, a interface do Swagger fica disponível no navegador, no endereço definido no `main.ts` pelo `SwaggerModule.setup()`:
+
+```text
+http://localhost:3000/docs
+```
+
+## ⚙️ Configuração do Swagger
+
+A configuração da documentação fica no `main.ts`, antes de a aplicação começar a escutar a porta:
+
+```typescript
+const config = new DocumentBuilder()
+  .setTitle('API de Catálogo e Estoque')
+  .setDescription('Documentação técnica interativa e viva para integração')
+  .setVersion('1.0')
+  .addTag('produto')
+  .addBearerAuth()
+  .build();
+
+const document = SwaggerModule.createDocument(app, config);
+SwaggerModule.setup('docs', app, document);
+```
+
+| Método | Função |
+|---|---|
+| `setTitle()` | Define o título exibido no topo da documentação. |
+| `setDescription()` | Define a descrição geral da API. |
+| `setVersion()` | Define a versão da API. |
+| `addTag()` | Adiciona uma tag geral para agrupar as rotas. |
+| `addBearerAuth()` | Adiciona o botão **Authorize** para autenticação com token Bearer. Nesta etapa, a autenticação ainda não está implementada nas rotas. |
+| `SwaggerModule.createDocument()` | Gera o documento OpenAPI a partir da aplicação e da configuração. |
+| `SwaggerModule.setup('docs', ...)` | Publica a documentação na rota `/docs`. |
+
+## 🔄 Fluxo da Requisição
+
+```text
+POST /produto
+        │
+        ▼
+Body recebido e tipado como CriarProduto
+        │
+        ▼
+ProdutoController.criar()
+        │
+        └── 201 Created com id, dados e criadoEm
+```
+
+## 🧠 Conceitos Praticados
+
+- `@Controller()`
+- `@Post()`
+- `@Body()`
+- DTO (Data Transfer Object)
+- `@ApiTags()`
+- `@ApiOperation()`
+- `@ApiResponse()`
+- `@ApiProperty()`
+- Documentação de API com OpenAPI
+- Separação entre Controller e DTO
+
+## 🚀 Como Rodar
+
+### 1. Clone o repositório
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+git clone https://github.com/emnlfrnds/back-end-codes.git
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 2. Acesse o diretório
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+cd back-end-codes
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 3. Entre na pasta da aula e do projeto
 
-## Observability
+```bash
+cd aula17
+cd documentacao-com-swagger-nestjs
+```
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+### 4. Instale as dependências
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+```bash
+npm install
+```
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+### 5. Execute o projeto
 
-This project is already instrumented. Create a free account at [observe.nestjs.com](https://observe.nestjs.com), add an application, and paste the generated app key and secret into the `ObserveModule.forRoot()` call in `src/app.module.ts`.
+```bash
+npm run start:dev
+```
 
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
+Depois, abra `http://localhost:3000/docs` no navegador para ver a documentação.
 
-## Resources
+## ⚠️ Observação
 
-Check out a few resources that may come in handy when working with NestJS:
+Nesta etapa, o foco é a documentação. O DTO descreve os dados, mas não há validação aplicada à rota, e o produto não é persistido. O `AppController` e o `AppService` ainda não possuem rotas nem métodos.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 📚 Referências
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- [NestJS — OpenAPI (Swagger)](https://docs.nestjs.com/openapi/introduction)
+- [OpenAPI Specification](https://swagger.io/specification/)
