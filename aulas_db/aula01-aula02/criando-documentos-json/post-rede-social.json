@@ -1,0 +1,31 @@
+{
+  "usuarios": [
+    { "id": 1, "username": "emnlfrnds", "nome": "Enzo Emanoel" },
+    { "id": 2, "username": "malupales", "nome": "Malu Pelaes" }
+  ],
+  "post": {
+    "id": 1,
+    "autorId": 1,
+    "texto": "Hoje eu fiz documento usando JSON",
+    "criadoEm": "2026-10-20T10:00:00-03:00",
+    "curtidas": [
+      { "userId": 2, "criadoEm": "2026-10-20T10:30:00-03:00"}
+    ],
+    "comentarios": [
+      {
+        "id": 1,
+        "userId": 2,
+        "texto": "gostei muito",
+        "respostas": [
+          {
+            "id": 2,
+            "userId": 1,
+            "mencionaUserId": 2,
+            "texto": "sabia que tu ia gosta",
+            "criadoEm": "2026-10-20T10:45:00-03-00"
+          }
+        ]
+      }
+    ]
+  }
+}

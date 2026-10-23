@@ -1,0 +1,19 @@
+{
+    "nome": "Lucas Almeida",
+    "matricula": "0010",
+    "dataNascimento": "2010-01-01",
+    "curso": "ADS",
+    "Disciplina": [
+        {"nome": "Algoritmos", "nota": 8.5},
+        {"nome": "Estrutura de Dados", "nota": 9.6},
+        {"nome": "Dev. Web", "nota": 10.0}
+    ],
+    "endereco": {
+        "rua": "Rua das Espadas",
+        "numero": "123",
+        "bairro": "Arena de Fogo",
+        "cidade": "Macapá",
+        "estado": "Amapá",
+        "cep": "68900200"
+    }
+}

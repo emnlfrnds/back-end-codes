@@ -1,0 +1,14 @@
+{
+    "alunos": [
+        {
+            "_id": "6677676677",
+            "nome": "Emanoel Fernandes",
+            "idade": 25,
+            "matricula": 20260001,
+            "cursos": [
+                "Desenvolvimento de Sistemas",
+                "Técnico de Informática"
+            ]
+        }
+    ]
+}
