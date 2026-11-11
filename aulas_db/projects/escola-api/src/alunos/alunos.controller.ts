@@ -1,20 +1,20 @@
 import {
-    Body,
-    Controller,
-    DefaultValuePipe,
-    Delete,
-    Get,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Query,
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
 import {
-    ApiConflictResponse,
-    ApiOperation,
-    ApiQuery,
-    ApiResponse,
+  ApiConflictResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
 } from '@nestjs/swagger';
 import { AlunosService } from './alunos.service.js';
 import { CreateAlunoDto } from './dto/create-aluno.dto.js';
@@ -75,11 +75,25 @@ export class AlunosController {
     type: 'number',
     description: 'Número de itens por página',
   })
+  @ApiQuery({
+    name: 'nome',
+    required: false,
+    type: 'string',
+    description: 'Filtra alunos pelo nome',
+  })
+  @ApiQuery({
+    name: 'curso',
+    required: false,
+    type: 'string',
+    description: 'Filtra alunos pelo curso',
+  })
   findAllPage(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('nome') nome?: string,
+    @Query('curso') curso?: string,
   ) {
-    return this.alunosService.findAllPage(page, limit);
+    return this.alunosService.findAllPage(page, limit, nome, curso);
   }
 
   @Get(':id')

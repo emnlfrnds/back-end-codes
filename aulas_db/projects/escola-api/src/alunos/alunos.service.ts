@@ -40,8 +40,25 @@ export class AlunosService {
     }
   }
 
-  async findAllPage(page: number, limit: number) {
+  async findAllPage(
+    page: number,
+    limit: number,
+    nome?: string,
+    curso?: string,
+  ) {
     const skip = (page - 1) * limit;
+
+    const filtro: any = {};
+    if (nome) {
+      filtro.name = {
+        $regex: new RegExp(nome, 'i'),
+      };
+    }
+
+    if (curso) {
+      filtro.cursos = curso;
+    }
+
     const [data, total] = await Promise.all([
       this.alunoModel.find().skip(skip).limit(limit).exec(),
       this.alunoModel.countDocuments().exec(),
