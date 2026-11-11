@@ -48,9 +48,12 @@ export class AlunosService {
   ) {
     const skip = (page - 1) * limit;
 
-    const filtro: any = {};
+    const filtro: {
+      nome?: { $regex: RegExp };
+      cursos?: string;
+    } = {};
     if (nome) {
-      filtro.name = {
+      filtro.nome = {
         $regex: new RegExp(nome, 'i'),
       };
     }
@@ -60,8 +63,8 @@ export class AlunosService {
     }
 
     const [data, total] = await Promise.all([
-      this.alunoModel.find().skip(skip).limit(limit).exec(),
-      this.alunoModel.countDocuments().exec(),
+      this.alunoModel.find(filtro).skip(skip).limit(limit).exec(),
+      this.alunoModel.countDocuments(filtro).exec(),
     ]);
 
     return {
