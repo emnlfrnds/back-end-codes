@@ -1,9 +1,22 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateAlunoDto } from './dto/create-aluno.dto.js';
 import { UpdateAlunoDto } from './dto/update-aluno.dto.js';
 import { Aluno, AlunoDocument } from './schemas/aluno.schema.js';
+
+function isDuplicateKeyError(error: unknown): error is { code: number } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    error.code === 11000
+  );
+}
 
 @Injectable()
 export class AlunosService {
@@ -14,7 +27,17 @@ export class AlunosService {
   async create(createAlunoDto: CreateAlunoDto): Promise<Aluno> {
     const createdAluno = new this.alunoModel(createAlunoDto);
 
-    return createdAluno.save();
+    try {
+      return await createdAluno.save();
+    } catch (error) {
+      if (isDuplicateKeyError(error)) {
+        throw new ConflictException(
+          'Já existe um aluno cadastrado com esta matrícula.',
+        );
+      }
+
+      throw error;
+    }
   }
 
   async findAllPage(page: number, limit: number) {

@@ -1,16 +1,21 @@
 import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Patch,
-  Post,
-  Query,
+    Body,
+    Controller,
+    DefaultValuePipe,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiConflictResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { AlunosService } from './alunos.service.js';
 import { CreateAlunoDto } from './dto/create-aluno.dto.js';
 import { UpdateAlunoDto } from './dto/update-aluno.dto.js';
@@ -30,6 +35,9 @@ export class AlunosController {
   @ApiResponse({
     status: 400,
     description: 'Dados inválidos para criação da matrícula de um aluno.',
+  })
+  @ApiConflictResponse({
+    description: 'Já existe um aluno cadastrado com esta matrícula.',
   })
   @ApiResponse({
     status: 500,
