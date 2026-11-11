@@ -11,10 +11,10 @@ import {
     Query,
 } from '@nestjs/common';
 import {
-  ApiConflictResponse,
-  ApiOperation,
-  ApiQuery,
-  ApiResponse,
+    ApiConflictResponse,
+    ApiOperation,
+    ApiQuery,
+    ApiResponse,
 } from '@nestjs/swagger';
 import { AlunosService } from './alunos.service.js';
 import { CreateAlunoDto } from './dto/create-aluno.dto.js';
@@ -67,13 +67,13 @@ export class AlunosController {
     name: 'page',
     required: false,
     type: 'number',
-    description: 'Itens por página',
+    description: 'Número da página para páginação',
   })
   @ApiQuery({
     name: 'limit',
     required: false,
     type: 'number',
-    description: 'Itens por página',
+    description: 'Número de itens por página',
   })
   findAllPage(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
