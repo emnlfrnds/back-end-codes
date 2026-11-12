@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { getModelToken } from '@nestjs/mongoose';
-import { CreateAlunoDto } from './dto/create-aluno.dto.js';
+import { Test, TestingModule } from '@nestjs/testing';
 import { AlunosService } from './alunos.service.js';
+import { CreateAlunoDto } from './dto/create-aluno.dto.js';
 import { Aluno } from './schemas/aluno.schema.js';
 
 describe('AlunosService', () => {
@@ -13,10 +13,12 @@ describe('AlunosService', () => {
   beforeEach(async () => {
     save = vi.fn();
     const query = {
+      sort: vi.fn(),
       skip: vi.fn(),
       limit: vi.fn(),
       exec: vi.fn().mockResolvedValue([]),
     };
+    query.sort.mockReturnValue(query);
     query.skip.mockReturnValue(query);
     query.limit.mockReturnValue(query);
     find = vi.fn().mockReturnValue(query);
