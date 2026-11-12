@@ -87,15 +87,35 @@ export class AlunosController {
     type: 'string',
     description: 'Filtra alunos pelo curso',
   })
+  @ApiQuery({
+    name: 'orderBy',
+    required: false,
+    type: 'string',
+    description: 'Escolha como você quer ordernar a lista',
+  })
+  @ApiQuery({
+    name: 'orderDirection',
+    required: false,
+    enum: ['asc', 'desc'],
+    description:
+      'Defina a direção da ordenação (asc para ascendente, desc para descendente)',
+  })
   findAllPage(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('nome') nome?: string,
     @Query('curso') curso?: string,
     @Query('orderBy') orderBy?: string,
-    @Query('orderDirection') orderDirection?: 'asc' | 'desc' | string,
+    @Query('orderDirection') orderDirection?: 'asc' | 'desc',
   ) {
-    return this.alunosService.findAllPage(page, limit, nome, curso, orderBy, orderDirection);
+    return this.alunosService.findAllPage(
+      page,
+      limit,
+      nome,
+      curso,
+      orderBy,
+      orderDirection,
+    );
   }
 
   @Get(':id')

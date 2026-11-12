@@ -46,7 +46,7 @@ export class AlunosService {
     nome?: string,
     curso?: string,
     orderBy?: string,
-    orderDirection?: 'asc' | 'desc' | string,
+    orderDirection?: 'asc' | 'desc',
   ) {
     const skip = (page - 1) * limit;
 
