@@ -1,6 +1,7 @@
 import {
   ArrayMinSize,
   IsArray,
+  IsBoolean,
   IsInt,
   IsNotEmpty,
   IsString,
@@ -48,13 +49,25 @@ export class CreateAlunoDto {
     example: ['Programador Full Stack'],
     description: 'Curso(s) do aluno',
   })
-  @IsArray()
   @IsString({
     each: true,
     message: 'Seu curso deve ser escrito em texto',
   })
+  @IsArray()
   @ArrayMinSize(1, {
     message: 'Você deve ter, pelo menos, um curso',
   })
   cursos: string[];
+
+  @ApiProperty({
+    example: true,
+    description: 'Esse aluno está ativo',
+  })
+  @IsBoolean({
+    message: 'Deve ser verdadeiro ou falso.',
+  })
+  @IsNotEmpty({
+    message: 'O aluno deve estar ativo ou inativo',
+  })
+  ativo: boolean;
 }
