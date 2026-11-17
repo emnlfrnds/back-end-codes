@@ -1,20 +1,20 @@
 import {
-    Body,
-    Controller,
-    DefaultValuePipe,
-    Delete,
-    Get,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Query,
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
 } from '@nestjs/common';
 import {
-    ApiConflictResponse,
-    ApiOperation,
-    ApiQuery,
-    ApiResponse,
+  ApiConflictResponse,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
 } from '@nestjs/swagger';
 import { AlunosService } from './alunos.service.js';
 import { CreateAlunoDto } from './dto/create-aluno.dto.js';
