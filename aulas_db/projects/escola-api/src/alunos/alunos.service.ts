@@ -3,8 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { variaveisAmbiente } from '../config/env.config.js';
 import { CreateAlunoDto } from './dto/create-aluno.dto.js';
 import { UpdateAlunoDto } from './dto/update-aluno.dto.js';
 import { Aluno, AlunoDocument } from './schemas/aluno.schema.js';
@@ -22,7 +24,15 @@ function isDuplicateKeyError(error: unknown): error is { code: number } {
 export class AlunosService {
   constructor(
     @InjectModel(Aluno.name) private alunoModel: Model<AlunoDocument>,
+    private readonly configService: ConfigService<variaveisAmbiente, true>,
   ) {}
+
+  configVariaveis() {
+    const nodeEnv = this.configService.get('NODE_ENV', { infer: true });
+    const port = this.configService.get('PORT', { infer: true });
+    const mongoUri = this.configService.get('MONGO_URI', { infer: true });
+    const jwtSecret = this.configService.get('JWT_SECRET', { infer: true });
+  }
 
   async create(createAlunoDto: CreateAlunoDto): Promise<Aluno> {
     const createdAluno = new this.alunoModel(createAlunoDto);

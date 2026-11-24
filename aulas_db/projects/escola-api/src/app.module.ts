@@ -1,15 +1,18 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule, type ConfigType } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { createObserveModule } from '@nestjs/observe';
 import joi from 'joi';
 import { AlunosModule } from './alunos/alunos.module.js';
+import authConfig from './config/auth.config.js';
+import databaseConfig from './config/database.config.js';
 export const { ObserveInstrument } = createObserveModule();
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [databaseConfig, authConfig],
       validationSchema: joi.object({
         NODE_ENV: joi
           .string()
@@ -21,9 +24,10 @@ export const { ObserveInstrument } = createObserveModule();
       }),
     }),
     MongooseModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'),
+      inject: [databaseConfig.KEY],
+      useFactory: (dbconfig: ConfigType<typeof databaseConfig>) => ({
+        uri: dbconfig.uri,
+        maxPoolSize: dbconfig.maxPoolSize,
       }),
     }),
     AlunosModule,
