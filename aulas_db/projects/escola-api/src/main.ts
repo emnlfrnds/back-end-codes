@@ -40,7 +40,9 @@ async function bootstrap() {
   Logger.log(`API escola rodando na Porta ${await app.getUrl()}`, 'Port');
   loggerDatabase.log(`Conectado em: ${configDb.uri}`);
   loggerDatabase.log(`Pool Máximo: ${configDb.maxPoolSize}`);
-  loggerAuth.log(`Chave secreta "que não é mais secreta": ${configAuth.jwtSecret}`);
+  loggerAuth.log(
+    `Chave secreta "que não é mais secreta": ${configAuth.jwtSecret}`,
+  );
   loggerAuth.log(`A chave expira em: ${configAuth.jwtExpiresIn}`);
 }
 await bootstrap();
